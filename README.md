@@ -101,7 +101,7 @@ returns:
 Example:
 
 ```bash
-curl -v -X PUT -H "Content-Type: application/json" -d @sample-payment-modified.json http://localhost:8080/api/v1/payment/sample
+curl -v -X PUT -H "Content-Type: application/json" -d @test/sample-payment-modified.json http://localhost:8080/api/v1/payment/sample
 ```
 
 
@@ -119,5 +119,5 @@ returns:
 Example:
 
 ```bash
-curl -X GET -H "Content-Type: application/json" http://localhost:8080/api/v1/payment/sample
+curl -X DELETE -H "Content-Type: application/json" http://localhost:8080/api/v1/payment/sample
 ```

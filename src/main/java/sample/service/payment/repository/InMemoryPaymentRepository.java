@@ -17,8 +17,7 @@ import sample.service.payment.model.Payment;
 import sample.service.payment.repository.protocol.PaymentRepository;
 import sample.service.payment.util.JsonUtil;
 
-@Repository()
-@Primary
+@Repository
 public class InMemoryPaymentRepository implements PaymentRepository {
 
   private final Logger LOG = LoggerFactory.getLogger(this.getClass());
