@@ -1,9 +1,11 @@
 package sample.service.payment.model;
 
 import com.google.gson.annotations.SerializedName;
+import org.springframework.data.annotation.Id;
 
 public class Payment {
 
+  @Id
   private String id;
   private String type;
   private Integer version;
