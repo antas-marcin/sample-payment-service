@@ -1,19 +1,47 @@
 package sample.service.payment.model;
 
-import java.util.List;
+import com.google.gson.annotations.SerializedName;
+import org.springframework.data.annotation.Id;
 
 public class Data {
 
-  private List<Payment> data;
-
-  public Data() {
+  public enum DataType {
+    Payment
   }
 
-  public Data(List<Payment> data) {
-    this.data = data;
+  @Id
+  private String id;
+  private DataType type;
+  private Integer version;
+  @SerializedName("organisation_id")
+  private String organisationId;
+  private Attributes attributes;
+
+  public Data(String id, DataType type, Integer version, String organisationId, Attributes attributes) {
+    this.id = id;
+    this.type = type;
+    this.version = version;
+    this.organisationId = organisationId;
+    this.attributes = attributes;
   }
 
-  public List<Payment> getData() {
-    return data;
+  public String getId() {
+    return id;
+  }
+
+  public DataType getType() {
+    return type;
+  }
+
+  public Integer getVersion() {
+    return version;
+  }
+
+  public String getOrganisationId() {
+    return organisationId;
+  }
+
+  public Attributes getAttributes() {
+    return attributes;
   }
 }
