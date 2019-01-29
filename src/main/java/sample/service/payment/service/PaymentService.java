@@ -1,15 +1,15 @@
 package sample.service.payment.service;
 
+import io.crnk.core.exception.ForbiddenException;
+import io.crnk.core.exception.ResourceNotFoundException;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sample.service.payment.exception.PaymentNotFoundException;
-import sample.service.payment.exception.PaymentNotSavedException;
-import sample.service.payment.model.Data;
-import sample.service.payment.model.NewData;
-import sample.service.payment.repository.DataMongoRepository;
+import sample.service.payment.model.Payment;
+import sample.service.payment.repository.PaymentMongoRepository;
 
 @Service
 public class PaymentService {
@@ -17,44 +17,49 @@ public class PaymentService {
   private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
-  private DataMongoRepository repository;
+  private PaymentMongoRepository repository;
 
-  public List<Data> getPayments() {
-    LOG.info("[getPayments] Get all payments from db");
-    return repository
-            .findByType(Data.DataType.Payment);
+  public List<Payment> getPayments() {
+    LOG.info("[getPayments] Get all payments");
+    return repository.findAll();
   }
 
-  public Data getPayment(String id) throws PaymentNotFoundException {
+  public Payment getPayment(String id) {
     LOG.info("[getPayment] Get payment with id: {}", id);
     return repository
             .findById(id)
-            .orElseThrow(() -> new PaymentNotFoundException(id));
+            .orElseThrow(() -> new ResourceNotFoundException("Payment with id:" + id + " not found"));
   }
 
-  public Data savePayment(NewData payment) throws PaymentNotSavedException {
+  public Payment savePayment(Payment payment) {
     LOG.info("[savePayment] Save payment data invoked");
-    return repository
-            .save(payment.toData());
+    if (StringUtils.isNotEmpty(payment.getId())) {
+      throw new ForbiddenException("Cannot save payment with client generated ID. ID must be empty.");
+    }
+    return repository.save(payment);
   }
 
-  public Data updatePayment(String id, Data payment) throws PaymentNotFoundException {
+  public Payment updatePayment(Payment payment) {
     LOG.info("[updatePayment] Update payment with id: {}", payment.getId());
 
     Integer lastVersion = repository
-            .findById(id)
-            .orElseThrow(() -> new PaymentNotFoundException(id))
+            .findById(payment.getId())
+            .orElseThrow(() -> new ResourceNotFoundException("Payment with id:" + payment.getId() + " not found"))
             .getVersion();
 
-    return repository
-            .save(new Data(payment.getId(), payment.getType(), lastVersion + 1, payment.getOrganisationId(), payment.getAttributes()));
+    return repository.save(createPayment(payment, lastVersion));
   }
 
-  public void deletePayment(String id) throws PaymentNotFoundException {
+  private Payment createPayment(Payment payment, Integer lastVersion) {
+    payment.setVersion(lastVersion + 1);
+    return payment;
+  }
+
+  public void deletePayment(String id) {
+    LOG.info("[deletePayment] Delete payment with id: {}", id);
     repository
             .findById(id)
-            .orElseThrow(() -> new PaymentNotFoundException(id));
-    LOG.info("[deletePayment] Delete payment with id: {}", id);
+            .orElseThrow(() -> new ResourceNotFoundException("Payment with id:" + id + " not found"));
     repository.deleteById(id);
   }
 

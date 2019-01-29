@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.springframework</groupId>
@@ -18,10 +18,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -36,16 +32,80 @@
             <artifactId>json-path</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- GSON -->
+        <!-- CRNK -->
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.5</version>
+            <groupId>io.crnk</groupId>
+            <artifactId>crnk-setup-spring-boot2</artifactId>
+            <version>${crnk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.crnk</groupId>
+            <artifactId>crnk-home</artifactId>
+            <version>${crnk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.crnk</groupId>
+            <artifactId>crnk-core</artifactId>
+            <version>${crnk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.crnk</groupId>
+            <artifactId>crnk-format-plain-json</artifactId>
+            <version>2.11.20190113153635</version>
+        </dependency>
+        <dependency>
+            <groupId>io.crnk</groupId>
+            <artifactId>crnk-validation</artifactId>
+            <version>${crnk.version}</version>
+        </dependency>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.6</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- docker-compose -->
+        <dependency>
+            <groupId>com.dkanejs.maven.plugins</groupId>
+            <artifactId>docker-compose-maven-plugin</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <!-- Tests -->
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>2.9.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>2.9.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.crnk</groupId>
+            <artifactId>crnk-client</artifactId>
+            <version>${crnk.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <properties>
         <java.version>1.8</java.version>
+        <crnk.version>2.6.20180522184741</crnk.version>
     </properties>
 
     <build>
@@ -53,6 +113,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.dkanejs.maven.plugins</groupId>
+                <artifactId>docker-compose-maven-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <composeFile>${project.basedir}/docker-compose.yml</composeFile>
+                    <detachedMode>false</detachedMode>
+                    <build>true</build>
+                </configuration>
             </plugin>
         </plugins>
     </build>
