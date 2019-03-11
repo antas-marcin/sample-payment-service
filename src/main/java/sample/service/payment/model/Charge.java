@@ -1,20 +1,15 @@
 package sample.service.payment.model;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
+
+@Getter
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Charge {
 
-  private String amount;
-  private String currency;
-
-  public Charge(String amount, String currency) {
-    this.amount = amount;
-    this.currency = currency;
-  }
-
-  public String getAmount() {
-    return amount;
-  }
-
-  public String getCurrency() {
-    return currency;
-  }
+  String amount;
+  String currency;
 }
